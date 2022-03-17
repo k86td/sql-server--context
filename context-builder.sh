@@ -32,6 +32,7 @@ ADMIN_PASSWORD=$4
 
 echo "Starting context-builder..."
 
+
 echo "Prepping context..."
 sed -i "s/__ADMIN__/$ADMIN_USERNAME/g; s/__PASSWORD__/$ADMIN_PASSWORD/g" create-context.sql
 

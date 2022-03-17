@@ -4,6 +4,4 @@ GO
 USE [knapsack];
 GO
 
-CREATE TABLE [test] (
-    id INT
-);
+-- database table should be inserted here
