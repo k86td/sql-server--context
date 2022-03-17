@@ -1,2 +1,1 @@
-
-/usr/local/src/context-builder.sh & /opt/mssql/bin/sqlservr
+/usr/local/src/context-builder.sh $@ & /opt/mssql/bin/sqlservr
