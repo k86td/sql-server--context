@@ -35,9 +35,6 @@ echo "Starting context-builder..."
 echo "Prepping context..."
 sed -i "s/__ADMIN__/$ADMIN_USERNAME/g; s/__PASSWORD__/$ADMIN_PASSWORD/g" create-context.sql
 
-echo "Displaying context..."
-cat create-context.sql
-
 echo "Waiting for Sql Server to be online..."
 while [ $CONNECTION_STATUS -ne 1 ]
 do
