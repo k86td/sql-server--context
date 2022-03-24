@@ -1,13 +1,13 @@
 
-IF NOT EXISTS(SELECT * FROM sys.databases WHERE name = 'knapsack')
-BEGIN
-CREATE DATABASE [knapsack];
-END
-GO
+--IF NOT EXISTS(SELECT * FROM sys.databases WHERE name = 'knapsack')
+--BEGIN
+--CREATE DATABASE [knapsack];
+--END
+--GO
 
 
-USE [knapsack]
-GO
+--USE [knapsack]
+--GO
 
 -- database table should be inserted here
 DROP TABLE IF EXISTS dbo.TypesItems;
