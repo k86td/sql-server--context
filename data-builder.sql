@@ -1,15 +1,20 @@
+
+IF NOT EXISTS(SELECT * FROM sys.databases WHERE name = 'knapsack')
+BEGIN
 CREATE DATABASE [knapsack];
+END
 GO
 
-USE [knapsack];
+
+USE [knapsack]
 GO
 
 -- database table should be inserted here
 DROP TABLE IF EXISTS dbo.TypesItems;
 GO
 CREATE TABLE dbo.TypesItems (
-    [idType] SMALLINT IDENTITY(1,1) PRIMARY KEY,
-    [nomType] VARCHAR2(20) NOT NULL
+    [idType] INT IDENTITY(1,1) PRIMARY KEY,
+    [nomType] VARCHAR(20) NOT NULL
 );
 GO
 
@@ -17,17 +22,17 @@ DROP TABLE IF EXISTS dbo.Items;
 GO
 CREATE TABLE dbo.Items (
     [idItem] INT IDENTITY(1,1) PRIMARY KEY,
-    [nom] VARCHAR2(50) NOT NULL,
+    [nom] VARCHAR(50) NOT NULL,
     [idType] SMALLINT NOT NULL,
     [prix] MONEY NOT NULL,
     [poid] NUMERIC(5,1) NOT NULL,
-    [urlImage] VARCHAR2(500) NOT NULL,
+    [urlImage] VARCHAR(500) NOT NULL,
     [qte] INT NOT NULL DEFAULT 0,
-    [disponibilite] BOOLEAN DEFAULT TRUE,
-    [description] VARCHAR2(500),
+    [disponibilite] BIT DEFAULT 1,
+    [description] VARCHAR(500),
 
     CONSTRAINT fk_Items_TypesItems FOREIGN KEY ([idItem]) 
-        REFERENCES [dbo.TypesItems],
+        REFERENCES [dbo].[TypesItems]([idType]),
     CONSTRAINT ck_Items_qte CHECK ([qte] >= 0),
 );
 GO
@@ -36,7 +41,7 @@ DROP TABLE IF EXISTS dbo.TypesArmes;
 GO
 CREATE TABLE dbo.TypesArmes (
     idType INT IDENTITY(1,1) PRIMARY KEY,
-    nom VARCHAR2(25) NOT NULL,
+    nom VARCHAR(25) NOT NULL,
 );
 GO
 
@@ -48,7 +53,7 @@ CREATE TABLE dbo.Armes (
     [type] INT NOT NULL,
 
     CONSTRAINT fk_Armes_Items FOREIGN KEY (idItem)
-        REFERENCE Items(idItem),
+        REFERENCES Items(idItem),
     CONSTRAINT fk_Armes_TypesArmes FOREIGN KEY (type)
         REFERENCES TypesArmes(idType),
     CONSTRAINT ck_Armes_efficacite CHECK (efficacite >= 0),
@@ -59,7 +64,7 @@ DROP TABLE IF EXISTS dbo.Medicaments;
 GO
 CREATE TABLE dbo.Medicaments (
     idItem INT PRIMARY KEY,
-    effetAttendu VARCHAR2(50) NOT NULL,
+    effetAttendu VARCHAR(50) NOT NULL,
     dureeEffet INT NOT NULL,
 
     CONSTRAINT fk_Medicaments_Items FOREIGN KEY (idItem)
@@ -71,7 +76,7 @@ DROP TABLE IF EXISTS dbo.Armures;
 GO
 CREATE TABLE dbo.Armures (
     idItem INT PRIMARY KEY,
-    matiere VARCHAR2(50) NOT NULL,
+    matiere VARCHAR(50) NOT NULL,
     taille INT NOT NULL,
 
     CONSTRAINT fk_Armures_Items FOREIGN KEY (idItem)
@@ -84,11 +89,11 @@ GO
 CREATE TABLE dbo.Joueurs (
     idJoueur INT IDENTITY(1,1) PRIMARY KEY,
     password VARBINARY(256) NOT NULL,
-    alias VARCHAR2(25) NOT NULL UNIQUE,
+    alias VARCHAR(25) NOT NULL UNIQUE,
     dexterite INT NOT NULL,
     poidMaximale INT NOT NULL,
     montantCaps MONEY NOT NULL,
-    isAdmin BOOLEAN NOT NULL DEFAULT FALSE,
+    isAdmin BIT NOT NULL DEFAULT 0,
 );
 GO
 
@@ -157,15 +162,16 @@ CREATE TABLE dbo.Collections (
 );
 GO
 
-DROP TABLE dbo.Ratings;
+DROP TABLE IF EXISTS dbo.Ratings;
 GO
 CREATE TABLE dbo.Ratings (
-    idJoueur NOT NULL,
+    idJoueur INT NOT NULL,
     rating INT NOT NULL DEFAULT 1,
     idItem INT NOT NULL,
-    commentaire VARCHAR2(250),
+    commentaire VARCHAR(250),
 
-    CONSTRAINT pk_Ratings PRIMARY KEY (idJoueur, idItem)
+    CONSTRAINT pk_Ratings PRIMARY KEY (idJoueur, idItem),
     CONSTRAINT ck_Ratings_rating 
         CHECK (rating <= 5 AND rating >= 1),
 );
+GO
